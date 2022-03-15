@@ -20,6 +20,7 @@ namespace AnimeLibraryBrowser
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(configuration =>
@@ -31,7 +32,11 @@ namespace AnimeLibraryBrowser
         public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment webHostEnvironment)
         {
             if (webHostEnvironment.IsDevelopment())
+            {
+                applicationBuilder.UseSwagger();
+                applicationBuilder.UseSwaggerUI();
                 applicationBuilder.UseDeveloperExceptionPage();
+            }
             else
             {
                 applicationBuilder.UseExceptionHandler("/Error");
