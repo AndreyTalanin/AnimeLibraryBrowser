@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository Items", "Repository Items", "{B2946DAB-D97F-461D-B90E-6D0ABC2970D7}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\LICENSE.md = ..\LICENSE.md
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimeLibraryBrowser", "AnimeLibraryBrowser\AnimeLibraryBrowser.csproj", "{6C46C2B5-25EE-4CAB-9655-53ECF088963E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C46C2B5-25EE-4CAB-9655-53ECF088963E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C46C2B5-25EE-4CAB-9655-53ECF088963E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C46C2B5-25EE-4CAB-9655-53ECF088963E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C46C2B5-25EE-4CAB-9655-53ECF088963E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8F880A8-87A2-44DD-BF7C-2B1AFE68EFD8}
+	EndGlobalSection
+EndGlobal
