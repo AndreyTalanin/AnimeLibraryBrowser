@@ -1,3 +1,5 @@
+using AnimeLibraryBrowser.Configuration;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -20,6 +22,8 @@ namespace AnimeLibraryBrowser
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AnimeLibraryConfiguration>(Configuration.GetSection(nameof(AnimeLibraryConfiguration)));
+
             services.AddSwaggerGen();
             services.AddControllersWithViews();
 
