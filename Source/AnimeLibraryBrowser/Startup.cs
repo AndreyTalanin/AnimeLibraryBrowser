@@ -5,6 +5,7 @@ using AnimeLibraryBrowser.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,8 +27,13 @@ namespace AnimeLibraryBrowser
         {
             services.Configure<AnimeLibraryConfiguration>(Configuration.GetSection(nameof(AnimeLibraryConfiguration)));
 
+            services.AddMemoryCache();
+
+            services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
+
             services.AddSingleton<IReleaseDetailsProvider, ReleaseDetailsProvider>();
             services.AddSingleton<IReleaseDirectorySelector, ReleaseDirectorySelector>();
+            services.AddSingleton<IFileTypeResolver, FileTypeResolver>();
 
             services.AddSwaggerGen();
             services.AddControllersWithViews();
