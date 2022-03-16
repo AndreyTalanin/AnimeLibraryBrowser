@@ -18,7 +18,7 @@ namespace AnimeLibraryBrowser.Controllers
         }
 
         [HttpGet("{title}")]
-        public string GetReleaseAsync(string title)
+        public ActionResult<Release> GetReleaseAsync(string title)
         {
             throw new NotImplementedException();
         }
