@@ -27,6 +27,7 @@ namespace AnimeLibraryBrowser
             services.Configure<AnimeLibraryConfiguration>(Configuration.GetSection(nameof(AnimeLibraryConfiguration)));
 
             services.AddSingleton<IReleaseDetailsProvider, ReleaseDetailsProvider>();
+            services.AddSingleton<IReleaseDirectorySelector, ReleaseDirectorySelector>();
 
             services.AddSwaggerGen();
             services.AddControllersWithViews();
