@@ -31,6 +31,7 @@ namespace AnimeLibraryBrowser
 
             services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
 
+            services.AddSingleton<IDirectoryTreeAnalyzer, DirectoryTreeAnalyzer>();
             services.AddSingleton<IReleaseDetailsProvider, ReleaseDetailsProvider>();
             services.AddSingleton<IReleaseDirectorySelector, ReleaseDirectorySelector>();
             services.AddSingleton<IFileTypeResolver, FileTypeResolver>();
