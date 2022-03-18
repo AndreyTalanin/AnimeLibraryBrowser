@@ -17,23 +17,28 @@ namespace AnimeLibraryBrowser.Services
     public class DirectoryTreeAnalyzer : IDirectoryTreeAnalyzer
     {
         private const int c_maxSearchDepth = 20;
+        private const string с_rootDirectoryFileGroupName = "<Root Directory>";
+        private const string c_pathFragmentSeparator = " \\ ";
 
         private readonly AnimeLibraryConfiguration m_configuration;
         private readonly IReleaseDetailsProvider m_releaseDetailsProvider;
         private readonly IReleaseDirectorySelector m_releaseDirectorySelector;
         private readonly IFileTypeResolver m_fileTypeResolver;
+        private readonly IFtpLinkFormatter m_ftpLinkFormatter;
 
         public DirectoryTreeAnalyzer(
             IOptions<AnimeLibraryConfiguration> configurationOptions,
             IReleaseDetailsProvider releaseDetailsProvider,
             IReleaseDirectorySelector releaseDirectorySelector,
-            IFileTypeResolver fileTypeResolver
+            IFileTypeResolver fileTypeResolver,
+            IFtpLinkFormatter ftpLinkFormatter
             )
         {
             m_configuration = configurationOptions.Value;
             m_releaseDetailsProvider = releaseDetailsProvider;
             m_releaseDirectorySelector = releaseDirectorySelector;
             m_fileTypeResolver = fileTypeResolver;
+            m_ftpLinkFormatter = ftpLinkFormatter;
         }
 
         public async Task<List<Release>> GetAllReleasesAsync()
@@ -76,7 +81,7 @@ namespace AnimeLibraryBrowser.Services
                         if (level > 0)
                             pathLevels.Add(directory.Name);
 
-                        string fileGroupName = level == 0 ? "<Root Directory>" : string.Join(" \\ ", pathLevels);
+                        string fileGroupName = level == 0 ? с_rootDirectoryFileGroupName : string.Join(c_pathFragmentSeparator, pathLevels);
 
                         FileGroup fileGroup = new FileGroup() { Name = fileGroupName };
 
@@ -85,12 +90,15 @@ namespace AnimeLibraryBrowser.Services
                             FileType fileType = m_fileTypeResolver.ResolveFileType(file.Name);
 
                             string relativePath = Path.GetRelativePath(m_configuration.RootDirectory, file.FullName);
+                            string ftpLink = m_ftpLinkFormatter.GetFtpLink(relativePath);
+
                             fileGroup.Files.Add(new File()
                             {
                                 Name = file.Name,
                                 Length = file.Length,
                                 Type = fileType,
                                 RelativePath = relativePath,
+                                FtpLink = ftpLink,
                             });
                         }
 
