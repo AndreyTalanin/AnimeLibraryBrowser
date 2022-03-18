@@ -26,6 +26,7 @@ namespace AnimeLibraryBrowser
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AnimeLibraryConfiguration>(Configuration.GetSection(nameof(AnimeLibraryConfiguration)));
+            services.Configure<FtpLinkFormatterConfiguration>(Configuration.GetSection(nameof(FtpLinkFormatterConfiguration)));
 
             services.AddMemoryCache();
 
@@ -35,6 +36,7 @@ namespace AnimeLibraryBrowser
             services.AddSingleton<IReleaseDetailsProvider, ReleaseDetailsProvider>();
             services.AddSingleton<IReleaseDirectorySelector, ReleaseDirectorySelector>();
             services.AddSingleton<IFileTypeResolver, FileTypeResolver>();
+            services.AddSingleton<IFtpLinkFormatter, FtpLinkFormatter>();
 
             services.AddSwaggerGen();
             services.AddControllersWithViews();
