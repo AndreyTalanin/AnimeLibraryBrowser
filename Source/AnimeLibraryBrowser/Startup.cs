@@ -26,6 +26,7 @@ namespace AnimeLibraryBrowser
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AnimeLibraryConfiguration>(Configuration.GetSection(nameof(AnimeLibraryConfiguration)));
+            services.Configure<FtpLinkFormatterConfiguration>(Configuration.GetSection(nameof(FtpLinkFormatterConfiguration)));
 
             services.AddMemoryCache();
 
