@@ -36,6 +36,7 @@ namespace AnimeLibraryBrowser
             services.AddSingleton<IReleaseDetailsProvider, ReleaseDetailsProvider>();
             services.AddSingleton<IReleaseDirectorySelector, ReleaseDirectorySelector>();
             services.AddSingleton<IFileTypeResolver, FileTypeResolver>();
+            services.AddSingleton<IFtpLinkFormatter, FtpLinkFormatter>();
 
             services.AddSwaggerGen();
             services.AddControllersWithViews();
