@@ -1,5 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
+using AnimeLibraryBrowser.Services.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,16 +10,25 @@ namespace AnimeLibraryBrowser.Controllers
     [ApiController]
     public class ContentController : ControllerBase
     {
-        [HttpGet("file")]
-        public Task<FileResult> DownloadFileAsync([FromQuery] string relativePath)
+        private readonly IContentDownloader m_contentDownloader;
+
+        public ContentController(IContentDownloader contentDownloader)
         {
-            throw new NotImplementedException();
+            m_contentDownloader = contentDownloader;
+        }
+
+        [HttpGet("file")]
+        public async Task<FileResult> DownloadFileAsync([FromQuery] string relativePath)
+        {
+            m_contentDownloader.GetFileParameters(relativePath, out string fileName, out string contentType);
+            return File(await m_contentDownloader.DownloadFileAsync(relativePath), contentType, fileName);
         }
 
         [HttpGet("directory")]
-        public Task<FileResult> DownloadDirectoryAsync([FromQuery] string relativePath)
+        public async Task<FileResult> DownloadDirectoryAsync([FromQuery] string relativePath)
         {
-            throw new NotImplementedException();
+            m_contentDownloader.GetDirectoryParameters(relativePath, out string fileName, out string contentType);
+            return File(await m_contentDownloader.DownloadDirectoryAsync(relativePath), contentType, fileName);
         }
     }
 }
