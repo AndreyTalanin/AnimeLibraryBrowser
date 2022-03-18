@@ -1,6 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Text;
-using System.Web;
 
 using AnimeLibraryBrowser.Configuration;
 using AnimeLibraryBrowser.Services.Interfaces;
@@ -27,7 +28,12 @@ namespace AnimeLibraryBrowser.Services
             if (!m_configuration.RootDirectoryFtpLink.EndsWith(c_pathFragmentSeparator))
                 stringBuilder.Append(c_pathFragmentSeparator);
 
-            string urlEncodedPath = Uri.EscapeDataString(relativePath.Replace("\\", c_pathFragmentSeparator));
+            string[] pathFragments = relativePath
+                .Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar })
+                .Select(pathFragment => Uri.EscapeDataString(pathFragment))
+                .ToArray();
+
+            string urlEncodedPath = string.Join(c_pathFragmentSeparator, pathFragments);
             stringBuilder.Append(urlEncodedPath);
 
             return stringBuilder.ToString();
