@@ -83,7 +83,11 @@ namespace AnimeLibraryBrowser.Services
 
                         string fileGroupName = level == 0 ? с_rootDirectoryFileGroupName : string.Join(c_pathFragmentSeparator, pathLevels);
 
-                        FileGroup fileGroup = new FileGroup() { Name = fileGroupName };
+                        FileGroup fileGroup = new FileGroup()
+                        {
+                            Name = fileGroupName,
+                            RelativePath = Path.GetRelativePath(m_configuration.RootDirectory, directory.FullName),
+                        };
 
                         foreach (FileInfo file in directory.GetFiles())
                         {
