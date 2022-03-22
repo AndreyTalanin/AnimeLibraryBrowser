@@ -1,0 +1,33 @@
+name: Main Workflow
+
+on: [push]
+
+jobs:
+  main-job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ["3.1.x"]
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.13
+        with:
+         versionSpec: '5.x'
+      - name: Execute GitVersion
+        uses: gittools/actions/gitversion/execute@v0.9.13
+      - name: Restore NuGet Packages
+        run: dotnet restore ./Source/AnimeLibraryBrowser.sln
+      - name: Build the Solution in the Debug Configuration
+        run: dotnet build ./Source/AnimeLibraryBrowser.sln --no-restore --configuration Debug
+      - name: Build the Solution in the Release Configuration
+        run: dotnet build ./Source/AnimeLibraryBrowser.sln --no-restore --configuration Release
+      - name: Run Tests
+        run: dotnet test ./Source/AnimeLibraryBrowser.sln --no-restore --no-build --verbosity normal
