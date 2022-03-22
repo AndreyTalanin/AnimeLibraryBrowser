@@ -12,6 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository Items", "Reposit
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{CD333B7E-03FE-4801-83DE-ACDFC7124C09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{DAA4E45D-045C-4FA8-9EA6-C90C66DA7758}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\main.yaml = ..\.github\workflows\main.yaml
+	EndProjectSection
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimeLibraryBrowser", "AnimeLibraryBrowser\AnimeLibraryBrowser.csproj", "{6C46C2B5-25EE-4CAB-9655-53ECF088963E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimeLibraryBrowser.Tests", "AnimeLibraryBrowser.Tests\AnimeLibraryBrowser.Tests.csproj", "{ACC0FEAD-53D4-4026-B37C-8B4865125D67}"
@@ -33,6 +40,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CD333B7E-03FE-4801-83DE-ACDFC7124C09} = {B2946DAB-D97F-461D-B90E-6D0ABC2970D7}
+		{DAA4E45D-045C-4FA8-9EA6-C90C66DA7758} = {CD333B7E-03FE-4801-83DE-ACDFC7124C09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E8F880A8-87A2-44DD-BF7C-2B1AFE68EFD8}
