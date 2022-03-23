@@ -14,6 +14,7 @@ namespace AnimeLibraryBrowser.Services
     public class ContentDownloader : IContentDownloader
     {
         private const int c_maxArchiveDepth = 20;
+        private const long c_maxArchiveLength = 4L * 1024 * 1024 * 1024;
         private const string c_defaultContentType = "application/octet-stream";
         private const string c_archiveContentType = "application/zip";
 
@@ -29,10 +30,10 @@ namespace AnimeLibraryBrowser.Services
         public async Task<Stream> DownloadFileAsync(string relativePath)
         {
             string absolutePath = GetAbsolutePath(relativePath);
-            return await CreateMemoryStreamAsync(async (memoryStream) =>
+            return await CreateTempFileStreamStreamAsync(async (resultStream) =>
             {
-                using FileStream fileStream = new FileStream(absolutePath, FileMode.Open, FileAccess.Read);
-                await fileStream.CopyToAsync(memoryStream);
+                using FileStream sourceStream = new FileStream(absolutePath, FileMode.Open, FileAccess.Read);
+                await sourceStream.CopyToAsync(resultStream);
             });
         }
 
@@ -48,9 +49,9 @@ namespace AnimeLibraryBrowser.Services
         public async Task<Stream> DownloadDirectoryAsync(string relativePath)
         {
             string absolutePath = GetAbsolutePath(relativePath);
-            return await CreateMemoryStreamAsync(async (memoryStream) =>
+            return await CreateTempFileStreamStreamAsync(async (resultStream) =>
             {
-                await WriteDirectoryArchiveToStreamAsync(memoryStream, absolutePath);
+                await WriteDirectoryArchiveToStreamAsync(resultStream, absolutePath);
             });
         }
 
@@ -72,20 +73,31 @@ namespace AnimeLibraryBrowser.Services
                 return absolutePath;
         }
 
-        private async Task<MemoryStream> CreateMemoryStreamAsync(MemoryStreamAsyncAction asyncAction)
+        private async Task<FileStream> CreateTempFileStreamStreamAsync(FileStreamAsyncAction asyncAction)
         {
-            MemoryStream memoryStream = new MemoryStream();
+            FileStream fileStream = null;
+            string tempFileName = Path.GetTempFileName();
+            try
+            {
+                fileStream = new FileStream(tempFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
 
-            await asyncAction(memoryStream);
+                await asyncAction(fileStream);
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return memoryStream;
+                fileStream.Seek(0, SeekOrigin.Begin);
+                return fileStream;
+            }
+            catch
+            {
+                fileStream?.Close();
+                File.Delete(tempFileName);
+                throw;
+            }
         }
 
-        private async Task WriteDirectoryArchiveToStreamAsync(Stream stream, string rootDirectoryPath)
+        private async Task WriteDirectoryArchiveToStreamAsync(Stream resultStream, string rootDirectoryPath)
         {
             DirectoryInfo rootDirectory = new DirectoryInfo(rootDirectoryPath);
-            using ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Create, true);
+            using ZipArchive archive = new ZipArchive(resultStream, ZipArchiveMode.Create, true);
 
             async Task ProcessDirectoryAsync(int level, DirectoryInfo directory)
             {
@@ -94,6 +106,9 @@ namespace AnimeLibraryBrowser.Services
 
                 foreach (FileInfo file in directory.GetFiles())
                 {
+                    if (resultStream.Length >= c_maxArchiveLength)
+                        throw new InvalidOperationException("Unable to create an archive of size larger than 4 GB.");
+
                     string relativeFilePath = Path.Combine(relativeDirectoryPath, file.Name);
                     using Stream entryStream = archive.CreateEntry(relativeFilePath, CompressionLevel.Fastest).Open();
                     using FileStream fileStream = file.OpenRead();
@@ -110,6 +125,6 @@ namespace AnimeLibraryBrowser.Services
             await ProcessDirectoryAsync(0, rootDirectory);
         }
 
-        private delegate Task MemoryStreamAsyncAction(MemoryStream memoryStream);
+        private delegate Task FileStreamAsyncAction(FileStream fileStream);
     }
 }
