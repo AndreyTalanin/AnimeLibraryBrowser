@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Card, Container, Navbar } from "react-bootstrap";
 import AdvancedModeSwitch from "./components/AdvancedModeSwitch";
 import Release from "./entities/Release";
 import ReleaseTable from "./components/ReleaseTable";
@@ -21,13 +22,19 @@ const Application = (): JSX.Element => {
 
   return (
     <>
-      <h1>Anime Library Browser</h1>
+      <Navbar bg="light">
+        <Container>
+          <Navbar.Brand>Anime Library Browser</Navbar.Brand>
+        </Container>
+      </Navbar>
       <ReleaseTable releases={releases} advancedModeEnabled={advancedModeEnabled} />
-      <details>
-        <summary>Advanced Mode</summary>
-        <AdvancedModeSwitch advancedModeEnabled={advancedModeEnabled} advancedModeToggled={(enabled) => setAdvancedModeEnabled(enabled)} />
-      </details>
-      <p>Copyright @ 2022 Andrey Talanin, Leonid Yakhtin, Maxim Zarkov. Built with ASP.NET Core, TypeScript &#38; React.</p>
+      <AdvancedModeSwitch advancedModeEnabled={advancedModeEnabled} advancedModeToggled={(enabled) => setAdvancedModeEnabled(enabled)} />
+      <Card body border="light" className="text-center">
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndreyTalanin/AnimeLibraryBrowser">
+          Anime Library Browser
+        </a>
+        &nbsp;-&nbsp;Copyright @ 2022 Andrey Talanin, Leonid Yakhtin, Maxim Zarkov. Built with ASP.NET Core, TypeScript &#38; React.
+      </Card>
     </>
   );
 };
