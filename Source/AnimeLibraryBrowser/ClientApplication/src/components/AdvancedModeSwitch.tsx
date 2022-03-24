@@ -1,4 +1,5 @@
 import React from "react";
+import { Accordion, Button, Form, Stack } from "react-bootstrap";
 import { downloadDirectoryAsync, downloadFileAsync } from "../requests/contentRequests";
 
 export interface AdvancedModeSwitchProps {
@@ -21,18 +22,30 @@ const AdvancedModeSwitch = (props: AdvancedModeSwitchProps) => {
   };
 
   return (
-    <>
-      <div>
-        <input type="checkbox" name="enable-advanced-mode-checkbox" onChange={(e) => props.advancedModeToggled(e.target.checked)} />
-        <label htmlFor="enable-advanced-mode-checkbox">Enable Advanced Mode</label>
-      </div>
-      {props.advancedModeEnabled && (
-        <>
-          <button onClick={() => downloadCustomFile()}>Download Custom File</button>
-          <button onClick={() => downloadCustomDirectory()}>Download Custom Directory</button>
-        </>
-      )}
-    </>
+    <Accordion style={{ marginBottom: "16px" }}>
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>Advanced Mode</Accordion.Header>
+        <Accordion.Body>
+          <Stack gap={1}>
+            <Form.Check
+              type="checkbox"
+              label="Enable Advanced Mode (Allows you to see file lengths, relative paths, as well as to download custom files and directories)"
+              onChange={(e) => props.advancedModeToggled(e.target.checked)}
+            />
+            {props.advancedModeEnabled && (
+              <Stack direction="horizontal" gap={1}>
+                <Button variant="outline-primary" size="sm" onClick={() => downloadCustomFile()}>
+                  Download Custom File
+                </Button>
+                <Button variant="outline-primary" size="sm" onClick={() => downloadCustomDirectory()}>
+                  Download Custom Directory
+                </Button>
+              </Stack>
+            )}
+          </Stack>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
   );
 };
 
